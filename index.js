@@ -6,7 +6,7 @@ const CookieParser = require('cookie-parser');
 const Cors = require('cors');
 const Port = process.env.PORT || 2000;
 const mongoose = require('mongoose');
-
+const router = require('./routes');
 
 app.use(BodyParser.json());
 app.use(BodyParser.urlencoded({ extended: true }));
@@ -14,7 +14,8 @@ app.use(CookieParser());
 app.use(Cors({
     origin: "http://localhost:2222",
     credentials: true
-}))
+}));
+app.use('/api', router);
 
 mongoose.connect(process.env.DATABASE, { useNewUrlParser: true }, (err) => {
     if (err) console.log(err);
