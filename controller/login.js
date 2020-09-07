@@ -3,14 +3,17 @@ const Joi = require('@hapi/joi');
 const jwt = require('jsonwebtoken');
 
 
+//schema for verification
+const verifySchema = Joi.object({
+    email: Joi.string()
+        .regex(/^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/, "example@example.com")
+        .required(),
+    password: Joi.string().required()
+});
+
 //verification data middlware
 const verifyLogin = (req, res, next) => {
-    const verifySchema = Joi.object({
-        email: Joi.string()
-            .regex(/^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/, "example@example.com")
-            .required(),
-        password: Joi.string().required()
-    });
+
     if (typeof(verifySchema.validate(req.body).error) !== "undefined") {
         var path = verifySchema.validate(req.body).error.details[0].path[0];
         if (path === "password") {

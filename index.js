@@ -12,7 +12,7 @@ app.use(BodyParser.json());
 app.use(BodyParser.urlencoded({ extended: true }));
 app.use(CookieParser());
 app.use(Cors({
-    origin: "http://localhost:2222",
+    origin: "http://localhost:3000",
     credentials: true
 }));
 app.use('/api', router);

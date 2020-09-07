@@ -6,9 +6,10 @@ const BookSchema = mongoose.Schema({
     price: Number,
     img: String,
     url: String,
-    description: String
+    description: String,
+    categorie: String
 });
 
-const books = mongoose.model('books', BookSchema);
+const Books = mongoose.model('books', BookSchema);
 
-module.exports = books;
+module.exports = Books;
