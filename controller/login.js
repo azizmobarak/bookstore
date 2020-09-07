@@ -67,7 +67,7 @@ const Login = (req, res) => {
                 else {
                     res.cookie('token', token, { httpOnly: true });
                     res.status(200)
-                        .json({ message: 'login' });
+                        .json({ message: 'OK', data: "login" });
                 }
             });
     } catch {

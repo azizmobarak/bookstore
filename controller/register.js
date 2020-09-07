@@ -47,7 +47,10 @@ const Register = (req, res) => {
             .json({ message: "error detected please try later" });
         else {
             res.status(200)
-                .json({ message: 'Congrate!,you have registred succefully' });
+                .json({
+                    message: "OK",
+                    data: 'Congrate!,you have registred succefully'
+                });
         }
     });
 }

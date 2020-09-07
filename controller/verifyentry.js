@@ -6,7 +6,10 @@ const Verifyentry = (schema, req, res, next) => {
     if (typeof(schema.validate(req.body).error) === "undefined") {
         next();
     } else {
-        res.send(schema.validate(req.body).error.details[0].message)
+        res.status(401)
+            .json({
+                message: schema.validate(req.body).error.details[0].message
+            })
     }
 }
 

@@ -9,7 +9,7 @@ const booksdata = async(req, res) => {
         if (err) res.status(401)
             .json({ message: 'error detected, please try again!' });
         else {
-            await Books.find((err, doc) => {
+            await Books.find({}, 'title url img price', (err, doc) => {
                 if (err) res.status(401)
                     .json({ message: 'error detected, please try again!' });
                 else {
@@ -25,14 +25,29 @@ const booksdata = async(req, res) => {
                     res.status(200)
                         .json({
                             message: "OK",
-                            pages: pages,
-                            data: doc
-                        })
+                            data: doc,
+                            pages: pages
+                        });
                 }
             }).skip(toskip).limit(12)
         }
     });
 }
 
+//function to get one book's details
+const bookdata = (req, res) => {
+    Books.find({ _id: req.params.id }, (err, doc) => {
+        if (err) res.status(401)
+            .json({ message: 'error detected, please try again!' });
+        else {
+            res.status(200)
+                .json({
+                    message: "OK",
+                    data: doc
+                })
+        }
+    });
+}
 
-module.exports = { booksdata };
+
+module.exports = { booksdata, bookdata };

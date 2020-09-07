@@ -23,9 +23,14 @@ const newbook_verification = (req, res, next) => {
 const Newbooks = (req, res) => {
     var book = new Book(req.body);
     book.save((err, doc) => {
-        if (err) console.log(err);
+        if (err) res.status(401)
+            .json({ message: "error detected , please try later" });
         else {
-            res.send(doc);
+            res.status(200)
+                .json({
+                    message: "OK",
+                    data: "New Item added"
+                });
         }
     });
 }
