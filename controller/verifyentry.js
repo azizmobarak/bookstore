@@ -9,7 +9,7 @@ const Verifyentry = (schema, req, res, next) => {
         res.status(401)
             .json({
                 message: schema.validate(req.body).error.details[0].message
-            })
+            });
     }
 }
 
