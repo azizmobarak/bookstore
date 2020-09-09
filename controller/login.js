@@ -18,11 +18,11 @@ const verifyLogin = (req, res, next) => {
         var path = verifySchema.validate(req.body).error.details[0].path[0];
         if (path === "password") {
             res.status(406)
-                .json({ message: 'password can not be empty' })
+                .json({ message: 'error', data: 'password can not be empty' })
         }
         if (path === "email") {
             res.status(406)
-                .json({ message: 'email not valid please try something like this : example@example.example' })
+                .json({ message: 'error', data: 'email not valid please try something like this : example@example.example' })
         }
 
     } else {
@@ -34,7 +34,7 @@ const verifyLogin = (req, res, next) => {
 const Userexistence = (req, res, next) => {
     User.find({ $and: [{ "password": req.body.password }, { "email": req.body.email }] }, "password", (err, doc) => {
         if (err) res.status(406)
-            .json({ message: 'something happen please try later or contact us' });
+            .json({ message: 'error', data: "something happen please try later or contact us" });
         else {
             var tab = doc;
             if (tab.length == 1) {
@@ -43,12 +43,12 @@ const Userexistence = (req, res, next) => {
                         next();
                     } else {
                         res.status(401)
-                            .json({ massage: 'Email or password not correct please enter a valid email and password' });
+                            .json({ message: 'error', data: 'Email or password not correct please enter a valid email and password' });
                     }
                 }
             } else {
                 res.status(401)
-                    .json({ massage: 'Email or password not correct please enter a valid email and password' });
+                    .json({ message: 'error', data: 'Email or password not correct please enter a valid email and password' });
             }
         }
     }).exec();
@@ -63,16 +63,16 @@ const Login = (req, res) => {
             "logikeyn",
             (err, token) => {
                 if (err) res.status(401)
-                    .json({ message: 'error detected, please try login again!' });
+                    .json({ message: 'error', data: 'error detected, please try login again!' });
                 else {
                     res.cookie('token', token, { httpOnly: true });
                     res.status(200)
-                        .json({ message: 'OK', data: "login" });
+                        .json({ message: 'OK', data: "login success" });
                 }
             });
     } catch {
         res.status(403)
-            .json({ message: 'please try again!' });
+            .json({ message: 'error', data: 'please try again!' });
     }
 }
 

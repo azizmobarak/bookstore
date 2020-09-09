@@ -15,7 +15,8 @@ const Userdetails = Joi.object({
 
 //entry verification middlware
 const verifyRegister = (req, res, next) => {
-    //call verification
+    console.log(req.body)
+        //call verification
     Verifyentry(Userdetails, req, res, next);
 }
 
@@ -24,13 +25,13 @@ const Emailexistence = (req, res, next) => {
     var email = req.body.email;
     User.find({ "email": email }, (err, doc) => {
         if (err) res.status(500)
-            .json({ message: "error detected please try later" });
+            .json({ message: "error", data: "error detected please try later" });
         else {
             console.log(doc)
             if (typeof(doc) !== "undefined") {
                 if (doc.length > 0) {
                     res.status(406)
-                        .json({ message: "email already registred please try different" });
+                        .json({ message: "error", data: "email already registred please try different" });
                 } else {
                     next();
                 }
@@ -44,7 +45,7 @@ const Register = (req, res) => {
     var newuser = new User(req.body);
     newuser.save((err, doc) => {
         if (err) res.status(500)
-            .json({ message: "error detected please try later" });
+            .json({ message: "error", data: "error detected please try later" });
         else {
             res.status(200)
                 .json({
