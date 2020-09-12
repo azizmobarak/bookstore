@@ -65,9 +65,9 @@ const Login = (req, res) => {
                 if (err) res.status(401)
                     .json({ message: 'error', data: 'error detected, please try login again!' });
                 else {
-                    res.cookie('token', token, { httpOnly: true });
+                    res.cookie('token', token, { httpOnly: true, maxAge: 1 * 60 * 60 * 1000 });
                     res.status(200)
-                        .json({ message: 'OK', data: "login success" });
+                        .json({ message: 'OK', data: req.body.email });
                 }
             });
     } catch {

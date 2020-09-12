@@ -1,15 +1,15 @@
 const Books = require('../model/book');
+const { GTranslate } = require('@material-ui/icons');
 
 //books data with pages 
 const booksdata = async(req, res) => {
     var numberpage = parseInt(req.params.page);
     var toskip = (numberpage - 1) * 12;
-
     await Books.countDocuments(async(err, count) => {
         if (err) res.status(401)
             .json({ message: 'error detected, please try again!' });
         else {
-            await Books.find({}, 'title url img price', (err, doc) => {
+            await Books.find({}, 'title url img price description', (err, doc) => {
                 if (err) res.status(401)
                     .json({ message: 'error detected, please try again!' });
                 else {
@@ -60,7 +60,7 @@ const booksdataByCategorie = async(req, res) => {
             .json({ message: 'error detected, please try again!' });
         else {
             console.log(count)
-            await Books.find({ categorie: categorie }, 'title url img price', (err, doc) => {
+            await Books.find({ categorie: categorie }, 'title url img price description', (err, doc) => {
                 if (err) res.status(401)
                     .json({ message: 'error detected, please try again!' });
                 else {
@@ -85,4 +85,74 @@ const booksdataByCategorie = async(req, res) => {
     });
 }
 
-module.exports = { booksdata, bookdata, booksdataByCategorie };
+//underteen
+//books data with pages 
+const underteen = async(req, res) => {
+    var numberpage = parseInt(req.params.page);
+    var toskip = (numberpage - 1) * 12;
+    await Books.countDocuments({ price: { $lte: 10 } }, async(err, count) => {
+        if (err) res.status(401)
+            .json({ message: 'error detected, please try again!' });
+        else {
+            await Books.find({ price: { $lte: 10 } }, 'title url img price description', (err, doc) => {
+                if (err) res.status(401)
+                    .json({ message: 'error detected, please try again!' });
+                else {
+                    //detect pages number ----------------------
+                    var pages;
+                    var total = count / 12;
+                    if (parseInt(total) < total) {
+                        pages = parseInt(total) + 1;
+                    } else {
+                        pages = parseInt(total);
+                    }
+                    //--------------------------------------
+                    res.status(200)
+                        .json({
+                            message: "OK",
+                            data: doc,
+                            pages: pages
+                        });
+                }
+            }).skip(toskip).limit(12)
+        }
+    });
+}
+
+//Search Book -----------------------------------------------
+//books data with pages 
+const search = async(req, res) => {
+    var numberpage = parseInt(req.params.page);
+    var searchkey = req.params.searchkey;
+    var toskip = (numberpage - 1) * 12;
+    await Books.countDocuments({ $or: [{ title: { $regex: searchkey } }, { description: { $regex: searchkey } }, { categorie: { $regex: searchkey } }] }, async(err, count) => {
+        if (err) res.status(401)
+            .json({ message: 'error detected, please try again!' });
+        else {
+            await Books.find({ $or: [{ title: { $regex: searchkey } }, { description: { $regex: searchkey } }, { categorie: { $regex: searchkey } }] }, 'title url img price description', (err, doc) => {
+                if (err) res.status(401)
+                    .json({ message: 'error detected, please try again!' });
+                else {
+                    //detect pages number ----------------------
+                    var pages;
+                    var total = count / 12;
+                    if (parseInt(total) < total) {
+                        pages = parseInt(total) + 1;
+                    } else {
+                        pages = parseInt(total);
+                    }
+                    //--------------------------------------
+                    res.status(200)
+                        .json({
+                            message: "OK",
+                            data: doc,
+                            pages: pages
+                        });
+                }
+            }).skip(toskip).limit(12)
+        }
+    });
+}
+
+
+module.exports = { booksdata, bookdata, booksdataByCategorie, underteen, search };

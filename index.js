@@ -15,6 +15,8 @@ app.use(Cors({
     origin: "http://localhost:3000",
     credentials: true
 }));
+
+//routers
 app.use('/api', router);
 
 mongoose.connect(process.env.DATABASE, { useNewUrlParser: true }, (err) => {
