@@ -13,7 +13,8 @@ app.use(BodyParser.urlencoded({ extended: true }));
 app.use(CookieParser());
 app.use(Cors({
     origin: "http://localhost:3000",
-    credentials: true
+    credentials: true,
+    methods: "GET,PUT,PATCH,POST,DELETE,UPDATE",
 }));
 
 //routers

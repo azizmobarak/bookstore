@@ -7,13 +7,21 @@ const allusers = (req, res) => {
 
     User.find({}, 'email', (err, doc) => {
         if (err) res.status(401)
-            .json({ message: "error detected , please try later" });
+            .json({ message: "error", data: "error  detected , please try later" });
         else {
-            res.status(200)
-                .json({
-                    message: "OK",
-                    data: doc
-                });
+            User.countDocuments((err, count) => {
+                if (err) res.status(401)
+                    .json({ message: "error", data: "error  detected , please try later" });
+                else {
+                    var pages = parseInt(count / 20);
+                    res.status(200)
+                        .json({
+                            message: "OK",
+                            data: doc,
+                            pages: pages
+                        });
+                }
+            })
         }
     }).skip(toskip).limit(20);
 }
@@ -23,7 +31,7 @@ const deleteuser = (req, res) => {
     var id = req.body.id;
     User.deleteOne({ _id: id }, (err, doc) => {
         if (err) res.status(401)
-            .json({ message: "error detected , please try later" });
+            .json({ message: "error", data: "error  detected , please try later" });
         else {
             res.status(200)
                 .json({

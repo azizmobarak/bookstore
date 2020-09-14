@@ -154,5 +154,25 @@ const search = async(req, res) => {
     });
 }
 
+//get search books by name or categorie description
 
-module.exports = { booksdata, bookdata, booksdataByCategorie, underteen, search };
+const searchall = async(req, res) => {
+    console.log(req.params.searchkey)
+    var searchkey = req.params.searchkey;
+    await Books.find({ $or: [{ title: { $regex: searchkey } }, { description: { $regex: searchkey } }, { categorie: { $regex: searchkey } }] }, 'title url img price description categorie', (err, doc) => {
+        if (err) res.status(401)
+            .json({ message: 'error detected, please try again!' });
+        else {
+
+            res.status(200)
+                .json({
+                    message: "OK",
+                    data: doc
+                });
+        }
+    })
+}
+
+//---------------------------
+
+module.exports = { booksdata, bookdata, booksdataByCategorie, underteen, search, searchall };

@@ -24,7 +24,7 @@ const Newbooks = (req, res) => {
     var book = new Book(req.body);
     book.save((err, doc) => {
         if (err) res.status(401)
-            .json({ message: "error detected , please try later" });
+            .json({ message: "error", data: "error detected , please try later" });
         else {
             res.status(200)
                 .json({
