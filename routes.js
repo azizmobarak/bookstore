@@ -13,7 +13,7 @@ const updatebook = require('./controller/updatebook');
 const deletebook = require('./controller/deletebook');
 const { updatetviews, countviews } = require('./controller/countviews');
 const { allusers, deleteuser } = require('./controller/users');
-const { adminlogin, verifyadmin } = require('./controller/admin');
+const { adminlogin, verifyadmin, countadmins, addadmin, verifyadminentry } = require('./controller/admin');
 const { getallbookscount } = require('./controller/admin-chart');
 
 //user routes 
@@ -33,8 +33,10 @@ route.route("/updateviews").put(updatetviews);
 route.route("/countviews").get(countviews);
 route.route("/allusers/:page").get(allusers);
 route.route("/deleteuser").delete(deleteuser);
-route.route("/admin").post(verifyadmin, adminlogin);
+route.route("/admin").post(verifyadminentry, verifyadmin, adminlogin);
 route.route("/admin/bookscount").get(getallbookscount);
+route.route("/admin/count").get(countadmins);
+route.route("/admin/new").post(verifyadminentry, addadmin);
 route.route("/admin/searchbookwithoutlimit/:searchkey").get(searchall);
 
 
