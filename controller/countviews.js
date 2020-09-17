@@ -6,7 +6,6 @@ const updatetviews = (req, res) => {
         if (err) res.status(401)
             .json({ message: "error detected , please try later" });
         else {
-            console.log("get : " + doc[0].count);
             var count = doc[0].count;
             Views.updateOne({ _id: doc[0]._id }, { count: count + 1 }, (err, doc) => {
                 if (err) res.status(401)

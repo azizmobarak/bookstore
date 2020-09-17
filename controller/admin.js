@@ -88,8 +88,7 @@ const adminlogin = (req, res) => {
         if (err) res.status(401)
             .json({ message: "error", data: 'error detected, please try login again!' });
         else {
-            console.log(token)
-            res.cookie(token, "tokenadmin", { httpOnly: true, maxAge: 1 * 60 * 60 * 1000 });
+            res.cookie("admintoken", token, { httpOnly: true, maxAge: 1 * 60 * 60 * 1000 });
             res.json({
                 message: "OK",
                 data: "Login success"

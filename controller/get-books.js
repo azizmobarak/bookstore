@@ -59,7 +59,6 @@ const booksdataByCategorie = async(req, res) => {
         if (err) res.status(401)
             .json({ message: 'error detected, please try again!' });
         else {
-            console.log(count)
             await Books.find({ categorie: categorie }, 'title url img price description', (err, doc) => {
                 if (err) res.status(401)
                     .json({ message: 'error detected, please try again!' });
@@ -157,7 +156,6 @@ const search = async(req, res) => {
 //get search books by name or categorie description
 
 const searchall = async(req, res) => {
-    console.log(req.params.searchkey)
     var searchkey = req.params.searchkey;
     await Books.find({ $or: [{ title: { $regex: searchkey } }, { description: { $regex: searchkey } }, { categorie: { $regex: searchkey } }] }, 'title url img price description categorie', (err, doc) => {
         if (err) res.status(401)

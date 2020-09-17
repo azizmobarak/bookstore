@@ -15,6 +15,7 @@ const { updatetviews, countviews } = require('./controller/countviews');
 const { allusers, deleteuser } = require('./controller/users');
 const { adminlogin, verifyadmin, countadmins, addadmin, verifyadminentry } = require('./controller/admin');
 const { getallbookscount } = require('./controller/admin-chart');
+const { updatecolor, updatefont, getcolor } = require('./controller/them');
 
 //user routes 
 route.route('/register').post(verifyRegister, Emailexistence, Register);
@@ -24,20 +25,25 @@ route.route("/underteen/:page").get(underteen);
 route.route("/search/:page/:searchkey").get(search);
 route.route("/booksbycategorie/:page/:categorie").get(booksdataByCategorie);
 
+
 //admin routes
-route.route("/newbooks").post(newbook_verification, Newbooks);
-route.route("/updatebook").patch(newbook_verification, updatebook);
-route.route("/deletebook").delete(deletebook);
+route.route("/newbooks").post(AdminAuthorization, newbook_verification, Newbooks);
+route.route("/updatebook").patch(AdminAuthorization, newbook_verification, updatebook);
+route.route("/deletebook").delete(AdminAuthorization, deletebook);
 route.route("/bookdetails/:id").get(bookdata);
 route.route("/updateviews").put(updatetviews);
 route.route("/countviews").get(countviews);
-route.route("/allusers/:page").get(allusers);
-route.route("/deleteuser").delete(deleteuser);
+route.route("/allusers/:page").get(AdminAuthorization, allusers);
+route.route("/deleteuser").delete(AdminAuthorization, deleteuser);
 route.route("/admin").post(verifyadminentry, verifyadmin, adminlogin);
 route.route("/admin/bookscount").get(getallbookscount);
 route.route("/admin/count").get(countadmins);
 route.route("/admin/new").post(verifyadminentry, addadmin);
-route.route("/admin/searchbookwithoutlimit/:searchkey").get(searchall);
+route.route("/admin/searchbookwithoutlimit/:searchkey").get(AdminAuthorization, searchall);
+route.route('/user/them/color').get(getcolor);
 
+//them routes 
+route.route('/admin/them/color').put(AdminAuthorization, updatecolor);
+route.route('/admin/them/font').put(AdminAuthorization, updatefont);
 
 module.exports = route;

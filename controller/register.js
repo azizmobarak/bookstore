@@ -15,8 +15,7 @@ const Userdetails = Joi.object({
 
 //entry verification middlware
 const verifyRegister = (req, res, next) => {
-    console.log(req.body)
-        //call verification
+    //call verification
     Verifyentry(Userdetails, req, res, next);
 }
 
@@ -27,7 +26,6 @@ const Emailexistence = (req, res, next) => {
         if (err) res.status(500)
             .json({ message: "error", data: "error detected please try later" });
         else {
-            console.log(doc)
             if (typeof(doc) !== "undefined") {
                 if (doc.length > 0) {
                     res.status(406)
