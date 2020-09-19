@@ -1,6 +1,24 @@
 const express = require('express');
 const app = express();
 const route = express.Router();
+const multer = require('multer');
+
+var storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, './uploads')
+    },
+    filename: function(req, file, cb) {
+        var type = file.originalname;
+        cb(null, file.fieldname + '-' + Date.now() + type.substring(type.indexOf('.'), type.length))
+    }
+})
+var uploads = multer({ dest: 'uploads/', storage: storage });
+
+var uploadslider = uploads.fields([
+    { name: "img1", maxCount: 1 },
+    { name: "img2", maxCount: 1 },
+    { name: "img3", maxCount: 1 }
+]);
 
 //authorization
 const { Authorization, AdminAuthorization } = require('./controller/authorization');
@@ -15,7 +33,7 @@ const { updatetviews, countviews } = require('./controller/countviews');
 const { allusers, deleteuser } = require('./controller/users');
 const { adminlogin, verifyadmin, countadmins, addadmin, verifyadminentry } = require('./controller/admin');
 const { getallbookscount } = require('./controller/admin-chart');
-const { updatecolor, updatefont, getcolor } = require('./controller/them');
+const { updatecolor, updatefont, getcolor, getfont, updatelogo, getlogo, uploadsliderimg, getslider } = require('./controller/them');
 
 //user routes 
 route.route('/register').post(verifyRegister, Emailexistence, Register);
@@ -41,9 +59,14 @@ route.route("/admin/count").get(countadmins);
 route.route("/admin/new").post(verifyadminentry, addadmin);
 route.route("/admin/searchbookwithoutlimit/:searchkey").get(AdminAuthorization, searchall);
 route.route('/user/them/color').get(getcolor);
+route.route('/user/them/font').get(getfont);
 
 //them routes 
 route.route('/admin/them/color').put(AdminAuthorization, updatecolor);
 route.route('/admin/them/font').put(AdminAuthorization, updatefont);
+route.route('/admin/them/logo').post(AdminAuthorization, uploads.single('logo'), updatelogo);
+route.route('/admin/them/slider').post(AdminAuthorization, uploadslider, uploadsliderimg);
+route.route('/user/logo').get(getlogo)
+route.route('/user/slider').get(getslider)
 
 module.exports = route;
