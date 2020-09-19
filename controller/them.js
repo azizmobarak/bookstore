@@ -98,5 +98,151 @@ const updatefont = (req, res) => {
     })
 }
 
+const getfont = (req, res) => {
+    themfont.findOne((err, doc) => {
+        if (err)
+            res.status(401).json({
+                message: "error",
+                data: "error try later!"
+            })
+        else {
+            res.status(200)
+                .json({
+                    message: "OK",
+                    data: doc.font
+                });
+        }
+    })
+}
 
-module.exports = { updatecolor, updatefont, getcolor }
+//--------------- logo --------------------------
+
+const updatelogo = (req, res) => {
+    console.log(req.file.filename)
+    var file = req.file.filename;
+    themlogo.countDocuments((err, count) => {
+        if (err) res.status(401)
+            .json({ message: "OK", data: "Error can't change logo, try again" });
+        else {
+            if (count == 0 || typeof count === "undefined") {
+                var them = new themlogo({ logo: file });
+                them.save((err, doc) => {
+                    if (err) res.status(401)
+                        .json({ message: 'error', data: "Error can't change logo" });
+                    else {
+                        console.log("doc " + doc);
+                        res.status(200)
+                            .json({
+                                message: 'OK',
+                                data: doc.logo
+                            })
+                    }
+                })
+            } else {
+
+                themlogo.updateOne({}, { logo: file }, (err, doc) => {
+                    if (err) res.status(401)
+                        .json({ message: 'error', data: "Error can't change logo" });
+                    else {
+                        res.status(200)
+                            .json({
+                                message: 'OK',
+                                data: "the logo is updated"
+                            })
+                    }
+                })
+
+            }
+        }
+    })
+}
+
+const getlogo = (req, res) => {
+    themlogo.findOne((err, doc) => {
+        if (err) res.status(401)
+            .json({ message: 'error', data: "Error can't change logo" });
+        else {
+            res.status(200)
+                .json({
+                    message: 'OK',
+                    data: doc.logo
+                })
+        }
+    })
+}
+
+//--------------------------- Slider --------------------------------
+
+const uploadsliderimg = (req, res) => {
+    var img1 = req.files["img1"][0].filename;
+    var img2 = req.files["img2"][0].filename;
+    var img3 = req.files["img3"][0].filename;
+
+    themslider.countDocuments((err, count) => {
+        if (err) res.status(401)
+            .json({ message: "OK", data: "Error can't change logo, try again" });
+        else {
+            console.log(count)
+            if (count == 0 || typeof count === "undefined") {
+                var them = new themslider({ img1: img1, img2: img2, img3: img3 });
+                them.save((err, doc) => {
+                    if (err) res.status(401)
+                        .json({ message: 'error', data: "Error can't change logo" });
+                    else {
+                        console.log(doc)
+                        console.log("doc " + doc);
+                        res.status(200)
+                            .json({
+                                message: 'OK',
+                                data: "new slider added"
+                            })
+                    }
+                })
+            } else {
+
+                themslider.updateOne({}, { img1: img1, img2: img2, img3: img3 }, (err, doc) => {
+                    if (err) res.status(401)
+                        .json({ message: 'error', data: "Error can't change logo" });
+                    else {
+                        console.log(doc)
+                        res.status(200)
+                            .json({
+                                message: 'OK',
+                                data: "the slider is updated"
+                            })
+                    }
+                })
+
+            }
+        }
+    })
+
+
+}
+
+
+const getslider = (req, res) => {
+    themslider.findOne((err, doc) => {
+        if (err) res.status(401)
+            .json({ message: 'error', data: "Error can't change logo" });
+        else {
+            res.status(200)
+                .json({
+                    message: 'OK',
+                    data: doc
+                })
+        }
+    })
+}
+
+//----------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+module.exports = { updatecolor, updatefont, getcolor, getfont, updatelogo, getlogo, uploadsliderimg, getslider }
