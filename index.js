@@ -7,7 +7,9 @@ const Cors = require('cors');
 const Port = process.env.PORT || 2000;
 const mongoose = require('mongoose');
 const router = require('./routes');
+const path = require('path')
 
+app.use(express.static(__dirname + '/uploads'))
 app.use(BodyParser.json());
 app.use(BodyParser.urlencoded({ extended: true }));
 app.use(CookieParser());
