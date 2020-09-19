@@ -128,6 +128,7 @@ const search = async(req, res) => {
         if (err) res.status(401)
             .json({ message: 'error detected, please try again!' });
         else {
+            console.log(count);
             await Books.find({ $or: [{ title: { $regex: searchkey } }, { description: { $regex: searchkey } }, { categorie: { $regex: searchkey } }] }, 'title url img price description', (err, doc) => {
                 if (err) res.status(401)
                     .json({ message: 'error detected, please try again!' });
