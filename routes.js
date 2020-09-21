@@ -59,14 +59,14 @@ route.route("/admin/count").get(countadmins);
 route.route("/admin/new").post(verifyadminentry, addadmin);
 route.route("/admin/searchbookwithoutlimit/:searchkey").get(AdminAuthorization, searchall);
 route.route('/user/them/color').get(getcolor);
-route.route('/user/them/font').get(getfont);
+route.route('/user/font').get(getfont);
+route.route('/user/slider').get(getslider)
+route.route('/user/logo').get(getlogo)
 
 //them routes 
 route.route('/admin/them/color').put(AdminAuthorization, updatecolor);
 route.route('/admin/them/font').put(AdminAuthorization, updatefont);
 route.route('/admin/them/logo').post(AdminAuthorization, uploads.single('logo'), updatelogo);
 route.route('/admin/them/slider').post(AdminAuthorization, uploadslider, uploadsliderimg);
-route.route('/user/logo').get(getlogo)
-route.route('/user/slider').get(getslider)
 
 module.exports = route;

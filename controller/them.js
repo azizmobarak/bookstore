@@ -6,7 +6,10 @@ const updatecolor = (req, res) => {
     //count color
     themcolor.countDocuments((err, count) => {
         if (err)
-            console.log(err);
+            res.status(401).json({
+                message: 'error',
+                data: "Error detected tyr later!"
+            })
         else {
             if (count == 0 || typeof count === "undefined") {
                 var color = new themcolor(req.body)
@@ -42,39 +45,52 @@ const updatecolor = (req, res) => {
 
 //grt color 
 const getcolor = (req, res) => {
-    themcolor.findOne((err, doc) => {
-        if (err)
-            res.status(401).json({
-                message: "OK",
-                data: "error try later!"
-            })
-        else {
-            res.status(200)
-                .json({
+    try {
+        themcolor.findOne((err, doc) => {
+            if (err)
+                res.status(401).json({
                     message: "OK",
-                    data: doc.color
-                });
-        }
-    })
+                    data: "error try later!"
+                })
+            else {
+                if (doc !== null) {
+                    res.status(200)
+                        .json({
+                            message: "OK",
+                            data: doc.color
+                        });
+                } else {
+                    res.status(200)
+                        .json({
+                            message: "OK",
+                            data: 'rgb(245, 218, 99)'
+                        });
+                }
+            }
+        })
+    } catch {
+        res.status(200)
+            .json({
+                message: "OK",
+                data: 'rgb(245, 218, 99)'
+            });
+    }
 }
 
 //--------------font --------------------------------
 
 const updatefont = (req, res) => {
-    console.log(req.body)
-        //count the font
+    //count the font
     themfont.countDocuments((err, count) => {
         if (err) res.status(403)
             .json({ message: "error", data: "can't change the font , try later!" });
         else {
-            console.log("count " + count);
             if (count == 0 || typeof count == "undefined") {
                 var font = new themfont(req.body);
                 font.save((err, doc) => {
                     if (err) res.status(403)
                         .json({ message: "error", data: "can't change the font , try later!" });
                     else {
-                        console.log(doc);
                         res.status(200).json({
                             message: "OK",
                             data: "Font changed to " + req.body.font
@@ -86,7 +102,6 @@ const updatefont = (req, res) => {
                     if (err) res.status(403)
                         .json({ message: "error", data: "can't change the font , try later!" });
                     else {
-                        console.log(doc)
                         res.status(200).json({
                             message: "OK",
                             data: "Font changed to " + req.body.font
@@ -99,26 +114,41 @@ const updatefont = (req, res) => {
 }
 
 const getfont = (req, res) => {
-    themfont.findOne((err, doc) => {
-        if (err)
-            res.status(401).json({
-                message: "error",
-                data: "error try later!"
-            })
-        else {
-            res.status(200)
-                .json({
-                    message: "OK",
-                    data: doc.font
-                });
-        }
-    })
+    try {
+        themfont.findOne((err, doc) => {
+            if (err)
+                res.status(401).json({
+                    message: "error",
+                    data: "error try later!"
+                })
+            else {
+                if (doc !== null) {
+                    res.status(200)
+                        .json({
+                            message: "OK",
+                            data: doc.font
+                        });
+                } else {
+                    res.status(200)
+                        .json({
+                            message: "OK",
+                            data: 'normal'
+                        });
+                }
+            }
+        })
+    } catch {
+        res.status(200)
+            .json({
+                message: "OK",
+                data: 'normal'
+            });
+    }
 }
 
 //--------------- logo --------------------------
 
 const updatelogo = (req, res) => {
-    console.log(req.file.filename)
     var file = req.file.filename;
     themlogo.countDocuments((err, count) => {
         if (err) res.status(401)
@@ -130,7 +160,6 @@ const updatelogo = (req, res) => {
                     if (err) res.status(401)
                         .json({ message: 'error', data: "Error can't change logo" });
                     else {
-                        console.log("doc " + doc);
                         res.status(200)
                             .json({
                                 message: 'OK',
@@ -158,17 +187,34 @@ const updatelogo = (req, res) => {
 }
 
 const getlogo = (req, res) => {
-    themlogo.findOne((err, doc) => {
-        if (err) res.status(401)
-            .json({ message: 'error', data: "Error can't change logo" });
-        else {
-            res.status(200)
-                .json({
-                    message: 'OK',
-                    data: doc.logo
-                })
-        }
-    })
+    try {
+
+        themlogo.findOne((err, doc) => {
+            if (err) res.status(401)
+                .json({ message: 'error', data: "Error can't change logo" });
+            else {
+                if (doc !== null) {
+                    res.status(200)
+                        .json({
+                            message: 'OK',
+                            data: doc.logo
+                        })
+                } else {
+                    res.status(200)
+                        .json({
+                            message: 'OK',
+                            data: "logo.png"
+                        })
+                }
+            }
+        })
+    } catch {
+        res.status(200)
+            .json({
+                message: 'OK',
+                data: "logo.png"
+            })
+    }
 }
 
 //--------------------------- Slider --------------------------------
@@ -182,15 +228,12 @@ const uploadsliderimg = (req, res) => {
         if (err) res.status(401)
             .json({ message: "OK", data: "Error can't change logo, try again" });
         else {
-            console.log(count)
             if (count == 0 || typeof count === "undefined") {
                 var them = new themslider({ img1: img1, img2: img2, img3: img3 });
                 them.save((err, doc) => {
                     if (err) res.status(401)
                         .json({ message: 'error', data: "Error can't change logo" });
                     else {
-                        console.log(doc)
-                        console.log("doc " + doc);
                         res.status(200)
                             .json({
                                 message: 'OK',
@@ -204,7 +247,6 @@ const uploadsliderimg = (req, res) => {
                     if (err) res.status(401)
                         .json({ message: 'error', data: "Error can't change logo" });
                     else {
-                        console.log(doc)
                         res.status(200)
                             .json({
                                 message: 'OK',
@@ -222,17 +264,43 @@ const uploadsliderimg = (req, res) => {
 
 
 const getslider = (req, res) => {
-    themslider.findOne((err, doc) => {
-        if (err) res.status(401)
-            .json({ message: 'error', data: "Error can't change logo" });
-        else {
-            res.status(200)
-                .json({
-                    message: 'OK',
-                    data: doc
-                })
-        }
-    })
+    try {
+        themslider.findOne((err, doc) => {
+            if (err) res.status(401)
+                .json({ message: 'error', data: "Error can't change logo" });
+            else {
+                if (doc !== null) {
+                    res.status(200)
+                        .json({
+                            message: 'OK',
+                            data: doc
+                        })
+                } else {
+
+                    res.status(200)
+                        .json({
+                            message: 'OK',
+                            data: [
+                                { img1: "img1.PNG" },
+                                { img2: "img2.PNG" },
+                                { img3: "img3.PNG" }
+                            ]
+                        })
+                }
+            }
+        })
+    } catch {
+        var tab = {
+            img1: "img1.PNG",
+            img2: "img2.PNG",
+            img3: "img3.PNG"
+        };
+        res.status(200)
+            .json({
+                message: 'OK',
+                data: tab
+            })
+    }
 }
 
 //----------------------------------------------------------------------

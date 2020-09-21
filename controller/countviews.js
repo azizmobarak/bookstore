@@ -6,18 +6,33 @@ const updatetviews = (req, res) => {
         if (err) res.status(401)
             .json({ message: "error detected , please try later" });
         else {
-            var count = doc[0].count;
-            Views.updateOne({ _id: doc[0]._id }, { count: count + 1 }, (err, doc) => {
-                if (err) res.status(401)
-                    .json({ message: "error detected , please try later" });
-                else {
-                    res.status(200)
-                        .json({
-                            message: "OK",
-                            data: "updated"
-                        })
-                }
-            })
+            if (doc[0] !== "undefined") {
+                var count = doc[0].count;
+                Views.updateOne({ _id: doc[0]._id }, { count: count + 1 }, (err, doc) => {
+                    if (err) res.status(401)
+                        .json({ message: "error detected , please try later" });
+                    else {
+                        res.status(200)
+                            .json({
+                                message: "OK",
+                                data: "updated"
+                            })
+                    }
+                })
+            } else {
+                var view = new Views({ count: 1 });
+                view.save((err, doc) => {
+                    if (err) res.status(401)
+                        .json({ message: "error detected , please try later" });
+                    else {
+                        res.status(200)
+                            .json({
+                                message: "OK",
+                                data: "updated"
+                            })
+                    }
+                })
+            }
         }
     })
 }

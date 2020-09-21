@@ -87,16 +87,19 @@ const booksdataByCategorie = async(req, res) => {
 //underteen
 //books data with pages 
 const underteen = async(req, res) => {
+
     var numberpage = parseInt(req.params.page);
     var toskip = (numberpage - 1) * 12;
     await Books.countDocuments({ price: { $lte: 10 } }, async(err, count) => {
         if (err) res.status(401)
             .json({ message: 'error detected, please try again!' });
         else {
+            console.log("count books " + count);
             await Books.find({ price: { $lte: 10 } }, 'title url img price description', (err, doc) => {
                 if (err) res.status(401)
                     .json({ message: 'error detected, please try again!' });
                 else {
+                    console.log("books " + doc);
                     //detect pages number ----------------------
                     var pages;
                     var total = count / 12;
